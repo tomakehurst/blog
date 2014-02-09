@@ -2,12 +2,12 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://zenslapped.com
+url: http://tomakehurst.com
 title: Zen Slapped
 subtitle: Moments of enlightenment, delivered abruptly
 author: Tom Akehurst
 simple_search: http://google.com/search
-description:
+description: "Tom Akehurst's software developement blog"
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -94,7 +94,7 @@ disqus_short_name:
 disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-36386229-3
 
 # Facebook Like
 facebook_like: false
