@@ -6,7 +6,12 @@ comments: true
 categories: 
 ---
 
-A major benefit of being on the JVM is the wide range of infrastructure that built natively for it. Combined with first-class support for threading this allows entire (scaled-down) environments to be run in-memory for testing. There are numerous advantages to this - faster dev feedback cycles, consistent environments across the team and the ability to set a breakpoint anywhere in the stack, to name a few.
+A major benefit of being on the JVM is the wide range of infrastructure that built natively for it. Combined with first-class support for threading this allows entire (scaled-down) environments to be run in-memory for testing. There are numerous advantages to this, including:
+
+* Faster feedback
+* Consistent environment across the team
+* Easy debugging - set breakpoints anywhere in the stack
+* Write and run integration tests for your adapters (as in [Ports and Adapters](http://www.natpryce.com/articles/000772.html)) without needing a full environment
 
 <!-- more -->
 
@@ -49,6 +54,18 @@ public class HipDbRule extends ExternalResource {
 }
 ```
 
+I find it useful to hang test utility methods here too e.g.
+
+```java
+    public void clearData() {
+        db.deleteAllData();
+    }
+
+    public void createSchema(String name) {
+        db.createSchema(name);
+    }
+```
+
 If you have many more than a couple of components in your environment, the number of rules required can become a bit unwieldy. Also, including each rule as a class field as in the above examples gives you no control over the order in which they're evaluated, which can be a problem if there are dependencies between the components (e.g. Kafka requires a Zookeeper server). JUnit's RuleChain solves both of these problems. On my current project we've created an "environment" class, also a test rule, which composes the individual components and imposes a specific ordering. This looks a bit like this:
 
 ```java
@@ -64,3 +81,16 @@ public class MyTestEnvironment implements TestRule {
     }
 }
 ```
+
+Gotchas
+-------
+Many libraries aren't built with this kind of usage in mind, so a little bit of extra complexity is sometimes required. Issues I've encountered are:
+Cassandra manages some state in static variables, meaning that it survives restarts inside a single JVM. We worked around this by only starting Cassandra once per test run (by making the Cassandra server a static member of the rule and only starting it if it's not already running).
+
+You'll be pulling lots of extra dependencies, and there will inevitably be clashes. I've been making heavy use of ``mvn dependency:tree`` while working on this. I'd like to find a good way to do cross-platform JVM forking as a solution to this and the previous point.
+
+Where one component depends on another and startup happens on a background thread it's possible to start in a bad state. Polling and sleeps are often adequate if not great solutions to this.
+
+Some servers have large or volatile startup times. I've found that the Kafka + Zookeeper combination can take between 10 seconds and over minute to stabilise, which makes it hard to get into a TDD groove.
+
+Despite these obstacles I've found that the ability to run an embedded test environment is a valuable addition to a project.
