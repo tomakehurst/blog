@@ -3,7 +3,7 @@ layout: post
 title: "Introducing WireMock – an HTTP service stubbing library"
 date: 2012-08-18 12:14:45 +0000
 comments: true
-categories: 
+categories: [Java, Testing]
 ---
 
 [WireMock](http://wiremock.org) is a tool that allows HTTP exchanges to be stubbed and verified. It does this by creating an actual HTTP endpoint, rather than by stubbing or mocking the HTTP client class. It can be used directly from within JUnit (or your weapon of choice), run as a standalone process or deployed into a container with the aim of covering off a wide range of testing scenarios. It has a JSON API so you don't have to be working in JVM language to make use of it, although there is a also a fluent

@@ -3,10 +3,10 @@ layout: post
 title: "All-in-one test environments with JUnit"
 date: 2014-02-09 13:19:50 +0000
 comments: true
-categories: 
+categories: [Java, Testing]
 ---
 
-A major benefit of being on the JVM is the wide range of infrastructure that built natively for it. Combined with first-class support for threading this allows entire (scaled-down) environments to be run in-memory for testing. There are numerous advantages to this, including:
+A major benefit of building on the JVM is the wide range of infrastructure built natively for it. Combined with first-class support for threading this allows entire scaled-down environments to be run in-memory for testing. There are numerous advantages to this, including:
 
 * Faster feedback
 * Consistent environment across the team
@@ -37,9 +37,9 @@ public static DropwizardAppRule<MyAppConfiguration> RULE =
 For tools that don't come with their own rules, creating them can be achieved by subclassing JUnit's ExternalResource class e.g.
 
 ```java
-public class HipDbRule extends ExternalResource {
+public class SomeHipDbRule extends ExternalResource {
 
-    private HipDb db = new HipDb();
+    private SomeHipDb db = new HipDb();
     
     @Override
     protected void before() throws Throwable {
@@ -85,6 +85,7 @@ public class MyTestEnvironment implements TestRule {
 Gotchas
 -------
 Many libraries aren't built with this kind of usage in mind, so a little bit of extra complexity is sometimes required. Issues I've encountered are:
+
 Cassandra manages some state in static variables, meaning that it survives restarts inside a single JVM. We worked around this by only starting Cassandra once per test run (by making the Cassandra server a static member of the rule and only starting it if it's not already running).
 
 You'll be pulling lots of extra dependencies, and there will inevitably be clashes. I've been making heavy use of ``mvn dependency:tree`` while working on this. I'd like to find a good way to do cross-platform JVM forking as a solution to this and the previous point.
