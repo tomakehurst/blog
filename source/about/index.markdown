@@ -12,7 +12,7 @@ Over the last decade or so I've been a developer, app support lead, scrum master
 
 I mostly program in Java (despite the stigma) but regularly dabble in other high-level languages including Python, JavaScript and Clojure. Lately I've started doing an almost passable sysadmin impression, mostly with Linux, Puppet and Bash.
 
-I made (and maintain) [WireMock](http://wiremock.org).
+I made, and maintain [WireMock](http://wiremock.org).
 
 Links
 -----
