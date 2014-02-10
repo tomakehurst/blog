@@ -90,8 +90,17 @@ Cassandra manages some state in static variables, meaning that it survives resta
 
 You'll be pulling lots of extra dependencies, and there will inevitably be clashes. I've been making heavy use of ``mvn dependency:tree`` while working on this. I'd like to find a good way to do cross-platform JVM forking as a solution to this and the previous point.
 
-Where one component depends on another and startup happens on a background thread it's possible to start in a bad state. Polling and sleeps are often adequate if not great solutions to this.
+Where one service depends on another and startup happens on a background thread it's possible to start in a bad state. Polling and sleeps are often adequate if not great solutions to this.
 
 Some servers have large or volatile startup times. I've found that the Kafka + Zookeeper combination can take between 10 seconds and over minute to stabilise, which makes it hard to get into a TDD groove.
+
+The more services you run in your environment, the greater the risk they'll try to bind to port numbers already in use. To counter this I try to ensure that random, free ports are selected for each service then make sure the port numbers are accessible via the rule so that they can be passed to the app under test. Some libraries let you pass a 0 as the port number parameter and then select a free port for you. Where this isn't possible, you can do something like this:
+
+```java
+    ServerSocket socket = new ServerSocket(0);
+    int freePort = socket.getLocalPort();
+    socket.close();
+    MyService service = new MyService(freePort);
+```
 
 Despite these obstacles I've found that the ability to run an embedded test environment is a valuable addition to a project.
