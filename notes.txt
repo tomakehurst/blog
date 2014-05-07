@@ -1,0 +1,30 @@
+NetKernel
+
+Microservices
+
+Beneficial properties of microservices:
+- Independently deployable, single purpose components
+- Evolution via replacement not change
+- Data-centric, pass-by-value communication
+- Strongly enforced boundaries, published vs. public interface
+- Transparency?
+
+
+Downsides
+- Latency
+- Distributed systems failure modes
+- Weaker consistency
+- Refactoring - cost to move responsibilties between services is higher
+- Emergent complexity through async
+
+
+Are there other strategies in the same space? Can we trade away some of the upsides to alleviate the downsides?
+
+NetKernel
+
+
+Rich Hickey's comment about microservices
+Caching as killer feature
+Low-latency
+Choose distribution when required for scaling and resilience
+
